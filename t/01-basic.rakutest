@@ -1,0 +1,34 @@
+use Test;
+use Acme::Rautavistic::Sort ;
+
+is(dropsort(<3 2 3 1 5>), <3 3 5>, "double elements");
+is(dropsort(<3 1 2>), <3>, "from very high to small, then a bit higher again");
+is(dropsort(<0 0>), <0 0>, "0 is true");
+is(dropsort(<ultimate zomtec ultimate>), <ultimate zomtec>, 'alpha sort');
+
+# is(dropsort(Nil, Nil), [ Nil, Nil ], 'Nils are valid');
+# is(dropsort(Nil, 1, Nil ), [ Nil, 1 ], 'Nil lt 1' );
+# is(dropsort(Nil, 0, Nil ), [ Nil, 0 ], 'Nil lt 0' );
+# is(dropsort(Nil, 1, Nil, 2 ), [ Nil, 1, 2 ], 'multiple Nils in ascending line');
+# is(dropsort(Nil, 1, Nil, 0 ), [ Nil, 1 ], 'multiple Nils in descending line' );
+# is(dropsort(Nil, 1, 2 ), [ Nil, 1, 2 ], 'Nil, 1, 2' );
+# is(dropsort(Nil, 2, 1 ), [ Nil, 2 ], 'Nil lt 2, 2 gt 1');
+# is(dropsort(Nil, 'zaffe', Nil ), [ Nil, 'zaffe' ], 'Nil lt alpha text');
+
+is(dropsort(<3 2 4 1 5>), <3 4 5>, 'yet another line');
+is(dropsort(<3 4 5 6 7 8>), <3 4 5 6 7 8>, 'already sorted');
+is(dropsort(<9 8 7 6 5 4>), <9>, 'already reverse sorted');
+is(dropsort(<2>), <2>, 'single value');
+is(dropsort(), [ ], 'empty list');
+
+is(dropsort(<cc bb dd aa ee>), <cc dd ee>, 'alpha sort' );
+is(dropsort(<aa bb cc dd ee ff>), <aa bb cc dd ee ff>, 'already sorted alpha' );
+is(dropsort(<ii hh gg ff ee dd>), <ii>, 'already reverse sorted alpha' );
+is(dropsort(<bb>), <bb>, 'single alpha' );
+
+# is(dropsort(Nil, 1, 2, 5, 3, 4), [Nil, 1, 2, 5], 'Nil, the leader');
+# is(dropsort(1, 2, 5, 3, 4, Nil), [1, 2, 5], 'Nil does not follow');
+# is(dropsort(1, 2, Nil, 5, 3, 4, Nil), [1, 2, 5], 'Nil in the middle attack');
+# is([Nil], [Nil], 'single Nil'); # TODO: start with this
+
+done-testing;
