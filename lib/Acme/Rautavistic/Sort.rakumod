@@ -11,8 +11,8 @@ sub dropsort is export {
     #
     # I need some default for which "cmp" works as it already does but
     # without the warning.
-    my $last = '';
-    @_.map: { ($_ cmp $last == Same|More) ?? ($last := $_) !! Empty };
+    my $last;
+    @_.map: { $last //= $_; ($_ cmp $last ~~ Same|More) ?? ($last := $_) !! Empty };
 }
 
 =begin pod
