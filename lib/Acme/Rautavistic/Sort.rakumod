@@ -24,11 +24,8 @@ Acme::Rautavistic::Sort - Rautavistic sort functions
 use Acme::Rautavistic::Sort;
 
 # default alphanumeric comparison
-@res = dropsort( <3 2 3 1 5> );      # 3 3 5
-@res = dropsort( <cc bb dd aa ee> ); # cc dd ee
-
-# force numeric comparison (or other comparators)
-@res = dropsortx { $^a <=> $^b }, 1, 11, 2;
+@res = dropsort( <3 2 3 1 5> );      # <3 3 5>
+@res = dropsort( <cc bb dd aa ee> ); # <cc dd ee>
 
 =end code
 
@@ -80,25 +77,9 @@ Drop sort an array:
 
 =end code
 
-Values are compared using smart comparison (i.e., C<cmp>). Use
-dropsortx to specify alternate comparators.
-
-=head2 dropsortx
-
-Like dropsort but additionally takes a comparator:
-
-=begin code :lang<raku>
-
-@SORTED = dropsortx { $^a <=> $^b } @VALUES
-
-=end code
-
-Use the magic variables B<$^a> and B<$^b> for the comparison of two
-values.
-
-Please note, that due to the nature of the algorithm, just reversing
-C<$^a> and C<$^b> does not just reverse the result list.
-
+Values are compared using smart comparison (i.e., C<cmp> and C<~~>)
+sensibly, to handle numbers and strings in the original DWIM way of
+Perl when using allomorphs. Support for other types is not yet tested.
 
 =head1 AUTHOR
 
@@ -107,7 +88,7 @@ Steffen Schwigon <ss5@renormalist.net>
 =head1 ACKNOWLEDGEMENTS
 
 Felix Antonius Wilhelm Ostmann (benchmark, optimization and stunt
-coordinator)
+coordinator in the original Perl version)
 
 =head1 MORE INFO
 
