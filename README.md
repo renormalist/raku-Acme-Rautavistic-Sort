@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/renormalist/raku-Acme-Rautavistic-Sort/actions/workflows/test.yml/badge.svg)](https://github.com/renormalist/raku-Acme-Rautavistic-Sort/actions)
+
 NAME
 ====
 
@@ -10,11 +12,8 @@ SYNOPSIS
 use Acme::Rautavistic::Sort;
 
 # default alphanumeric comparison
-@res = dropsort( <3 2 3 1 5> );      # 3 3 5
-@res = dropsort( <cc bb dd aa ee> ); # cc dd ee
-
-# force numeric comparison (or other comparators)
-@res = dropsortx { $^a <=> $^b }, 1, 11, 2;
+@res = dropsort( <3 2 3 1 5> );      # <3 3 5>
+@res = dropsort( <cc bb dd aa ee> ); # <cc dd ee>
 ```
 
 DESCRIPTION
@@ -47,20 +46,7 @@ Drop sort an array:
 @SORTED = dropsort @VALUES
 ```
 
-Values are compared using smart comparison (i.e., `cmp`). Use dropsortx to specify alternate comparators.
-
-dropsortx
----------
-
-Like dropsort but additionally takes a comparator:
-
-```raku
-@SORTED = dropsortx { $^a <=> $^b } @VALUES
-```
-
-Use the magic variables **$^a** and **$^b** for the comparison of two values.
-
-Please note, that due to the nature of the algorithm, just reversing `$^a` and `$^b` does not just reverse the result list.
+Values are compared using smart comparison (i.e., `cmp` and `~~`) sensibly, to handle numbers and strings in the original DWIM way of Perl when using allomorphs. Support for other types is not yet tested.
 
 AUTHOR
 ======
@@ -70,7 +56,7 @@ Steffen Schwigon <ss5@renormalist.net>
 ACKNOWLEDGEMENTS
 ================
 
-Felix Antonius Wilhelm Ostmann (benchmark, optimization and stunt coordinator)
+Felix Antonius Wilhelm Ostmann (benchmark, optimization and stunt coordinator in the original Perl version)
 
 MORE INFO
 =========
