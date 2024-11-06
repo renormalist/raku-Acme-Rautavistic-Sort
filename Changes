@@ -2,3 +2,5 @@ Revision history for Acme::Rautavistic::Sort
 
 {{$NEXT}}
     - Initial version
+    - Port of the Perl module
+    - adapted to behave similar for numbers and strings when using allomorphs
