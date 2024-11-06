@@ -1,18 +1,14 @@
 unit class Acme::Rautavistic::Sort;
 
 sub dropsort is export {
-    # TODO:
-    #  - Fix warning: "Use of uninitialized value element of type Any
-    #    in string context" as soon as "Nil" appears.
-    #
-    # I don't want to initialize $last and by that settle down a
-    # type. Maybe there is some type-less Nil or so? So far it works
-    # with '' but I don't want to force strings.
-    #
-    # I need some default for which "cmp" works as it already does but
-    # without the warning.
     my $last;
-    @_.map: { $last //= $_; ($_ cmp $last ~~ Same|More) ?? ($last := $_) !! Empty };
+    @_.map: {
+        $last //= $_;
+
+        defined($last) && !defined($_) ?? Empty !!
+        ($_ cmp $last ~~ Same|More)    ?? ($last := $_) !!
+        Empty
+    };
 }
 
 =begin pod
