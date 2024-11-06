@@ -1,35 +1,51 @@
 use Test;
 use Acme::Rautavistic::Sort ;
 
-is(dropsort(<3 2 3 1 5>), <3 3 5>, "double elements");
-is(dropsort(<3 1 2>), <3>, "from very high to small, then a bit higher again");
-is(dropsort(<0 0>), <0 0>, "0 is true");
-is(dropsort(<ultimate zomtec ultimate>), <ultimate zomtec>, 'alpha sort');
+sub check (@in, @exp, $desc) {
+    my @out = dropsort(@in);
 
-ok(dropsort([ Nil, Nil ]) ~~ [ Nil, Nil ], 'Nils are valid');
-ok(dropsort([ Nil, 1, Nil ]) ~~ [ Nil, 1 ], 'Nil lt 1' );
-ok(dropsort([ Nil, 0, Nil ]) ~~ [ Nil, 0 ], 'Nil lt 0' );
-ok(dropsort([ Nil, 1, Nil, 2 ]) ~~ [ Nil, 1, 2 ], 'multiple Nils in ascending line');
+    # use Data::Dump::Tree;
+    # say "in:  "; ddt @in;
+    # say "out: "; ddt @out;
+    # say "exp: "; ddt @exp;
 
-ok(dropsort([ Nil, 1, Nil, 0 ]) ~~ [ Nil, 1 ], 'multiple Nils in descending line' );
-ok(dropsort([ Nil, 1, 2 ]) ~~ [ Nil, 1, 2 ], 'Nil, 1, 2' );
-ok(dropsort([ Nil, 2, 1 ]) ~~ [ Nil, 2 ], 'Nil lt 2, 2 gt 1');
-#ok(dropsort([ Nil, 'zaffe', Nil ]), [ Nil, 'zaffe' ], 'Nil lt alpha text');
+    ok(@out ~~ @exp, $desc);
+}
 
-is(dropsort(<3 2 4 1 5>), <3 4 5>, 'yet another line');
-is(dropsort(<3 4 5 6 7 8>), <3 4 5 6 7 8>, 'already sorted');
-is(dropsort(<9 8 7 6 5 4>), <9>, 'already reverse sorted');
-is(dropsort(<2>), <2>, 'single value');
-is(dropsort(), [ ], 'empty list');
+check([3, 2, 3, 1, 5], [3, 3, 5], "Num - double elements");
+check([3, 2, 3, 1, 5], [3, 3, 5], "Num - double elements");
+check([3, 1, 2],       [3],       "Num - from very high to small, then a bit higher again");
+check([0, 0],          [0, 0],    "Num - 0 is true");
 
-is(dropsort(<cc bb dd aa ee>), <cc dd ee>, 'alpha sort' );
-is(dropsort(<aa bb cc dd ee ff>), <aa bb cc dd ee ff>, 'already sorted alpha' );
-is(dropsort(<ii hh gg ff ee dd>), <ii>, 'already reverse sorted alpha' );
-is(dropsort(<bb>), <bb>, 'single alpha' );
+check([<3 2 3 1 5>], [<3 3 5>], "IntStr - double elements");
+check([<3 2 3 1 5>], [<3 3 5>], "IntStr - double elements");
+check([<3 1 2>],     [<3>],     "IntStr - from very high to small, then a bit higher again");
+check([<0 0>],       [<0 0>],   "IntStr - 0 is true");
+check([<ultimate zomtec ultimate>], [<ultimate zomtec>], 'Str - alpha sort');
 
-ok(dropsort([Nil, 1, 2, 5, 3, 4]) ~~ [Nil, 1, 2, 5], 'Nil, the leader');
-ok(dropsort([1, 2, 5, 3, 4, Nil]) ~~ [1, 2, 5], 'Nil does not follow');
-ok(dropsort([1, 2, Nil, 5, 3, 4, Nil]) ~~ [1, 2, 5], 'Nil in the middle attack');
-ok([Nil] ~~ [Nil], 'single Nil');
+check([ Nil ],               [ Nil ],          'single Nil');
+check([ Nil, Nil ],          [ Nil, Nil ],     'Nils are valid');
+check([ Nil, 1, Nil ],       [ Nil, 1 ],       'Nil lt 1' );
+check([ Nil, 0, Nil ],       [ Nil, 0 ],       'Nil lt 0' );
+check([ Nil, 1, Nil, 2 ],    [ Nil, 1, 2 ],    'multiple Nils in ascending line');
+check([ Nil, 1, Nil, 0 ],    [ Nil, 1 ],       'multiple Nils in descending line');
+check([ Nil, 1, 2 ],         [ Nil, 1, 2 ],    'Nil, 1, 2');
+check([ Nil, 2, 1 ],         [ Nil, 2 ],       'Nil lt 2, 2 gt 1');
+check([ Nil, 'zaffe', Nil ], [ Nil, 'zaffe' ], 'Nil lt alpha text');
+
+check([<3 2 4 1 5>],   [<3 4 5>],       'yet another line');
+check([<3 4 5 6 7 8>], [<3 4 5 6 7 8>], 'already sorted');
+check([<9 8 7 6 5 4>], [<9>],           'already reverse sorted');
+check([<2>],           [<2>],           'single value');
+check([],              [],              'empty list');
+
+check([<cc bb dd aa ee>],    [<cc dd ee>],          'alpha sort');
+check([<aa bb cc dd ee ff>], [<aa bb cc dd ee ff>], 'already sorted alpha' );
+check([<ii hh gg ff ee dd>], [<ii>],                'already reverse sorted alpha' );
+check([<bb>],                [<bb>],                'single alpha' );
+
+check([Nil, 1, 2, 5, 3, 4],      [Nil, 1, 2, 5],    'Nil, the leader');
+check([1, 2, 5, 3, 4, Nil],      [1, 2, 5],         'Nil does not follow');
+check([1, 2, Nil, 5, 3, 4, Nil], [1, 2, 5],         'Nil in the middle attack');
 
 done-testing;
